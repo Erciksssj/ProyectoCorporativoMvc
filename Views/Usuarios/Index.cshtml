@@ -4,7 +4,7 @@
 @if (puedeConsultar)
 {
 <div class="card"><div class="card-body"><form method="get" class="filters-inline"><input type="text" name="filtro" value="@filtro" class="form-control" placeholder="Buscar por usuario, correo o celular..." /><button type="submit" class="btn btn-outline">Filtrar</button><a asp-action="Index" class="btn btn-outline">Limpiar</a></form></div></div>
-<div class="card"><div class="table-wrapper"><table class="table"><thead><tr><th>ID</th><th>Imagen</th><th>Usuario</th><th>Perfil</th><th>Correo</th><th>Celular</th><th>Estado</th><th class="actions-column">Acciones</th></tr></thead><tbody>
+<div class="card"><div class="table-wrapper"><table class="table"><thead><tr><th>Imagen</th><th>Usuario</th><th>Perfil</th><th>Correo</th><th>Celular</th><th>Estado</th><th class="actions-column">Acciones</th></tr></thead><tbody>
 @if (Model.Items.Any())
 {
 @foreach (var item in Model.Items)
