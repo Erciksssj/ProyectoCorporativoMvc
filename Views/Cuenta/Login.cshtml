@@ -8,27 +8,7 @@
             <h1>Iniciar sesión</h1>
             <p>Ingresa con un usuario activo, contraseña correcta y un mecanismo de verificación válido.</p>
         </div>
-        <div class="card-body">
-            @if (ViewBag.Error is string error && !string.IsNullOrWhiteSpace(error))
-            {
-                <div class="alert alert-danger">@error</div>
-            }
-
-           // @if (Model.GoogleRecaptchaHabilitado)
-            //{
-               // <div class="alert alert-info">
-                   // Google reCAPTCHA está habilitado. Si el navegador tiene JavaScript activo verás el checkbox de <strong>No soy un robot</strong>.
-                   // Si JavaScript está desactivado, el formulario seguirá funcionando con el captcha local de respaldo.
-               // </div>
-          //  }
-           // else
-           // {
-             //   <div class="alert alert-info">
-               //     Google reCAPTCHA todavía no está configurado. El acceso se valida con captcha local de respaldo.
-               // </div>
-           // }
-
-            <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+       
 
             <form asp-action="Login" method="post" class="form-stack" novalidate>
                 <input asp-for="ReturnUrl" type="hidden" />
