@@ -1,0 +1,24 @@
+@model ResultadoPaginado<Perfil>
+@{ var filtro = ViewBag.Filtro as string ?? string.Empty; var puedeAgregar = (bool)(ViewBag.PuedeAgregar ?? false); var puedeConsultar = (bool)(ViewBag.PuedeConsultar ?? false); var puedeEditar = (bool)(ViewBag.PuedeEditar ?? false); var puedeEliminar = (bool)(ViewBag.PuedeEliminar ?? false); var puedeDetalle = (bool)(ViewBag.PuedeDetalle ?? false); }
+<div class="page-header"><div><h1>Módulo Perfil</h1><p>CRUD completo con paginado de 5 filas, filtros y breadcrumbs.</p></div>@if (puedeAgregar){<a asp-action="Create" class="btn">Nuevo perfil</a>}</div>
+@if (puedeConsultar)
+{
+<div class="card"><div class="card-body"><form method="get" class="filters-inline"><input type="text" name="filtro" value="@filtro" class="form-control" placeholder="Buscar perfil..." /><button type="submit" class="btn btn-outline">Filtrar</button><a asp-action="Index" class="btn btn-outline">Limpiar</a></form></div></div>
+<div class="card"><div class="table-wrapper"><table class="table"><thead><tr><th>ID</th><th>Perfil</th><th>Administrador</th><th class="actions-column">Acciones</th></tr></thead><tbody>
+@if (Model.Items.Any())
+{
+@foreach (var item in Model.Items)
+{
+<tr><td>@item.Id</td><td>@item.StrNombrePerfil</td><td><span class="badge @(item.BitAdministrador ? "badge-success" : "badge-secondary")">@(item.BitAdministrador ? "Sí" : "No")</span></td><td class="actions-cell">@if (puedeDetalle){<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline">Detalle</a>} @if (puedeEditar){<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline">Editar</a>} @if (puedeEliminar){<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>}</td></tr>
+}
+}
+else
+{
+<tr><td colspan="4" class="empty-state">No hay registros para mostrar.</td></tr>
+}
+</tbody></table></div><div class="pagination"><a asp-action="Index" asp-route-pagina="1" asp-route-filtro="@filtro" class="btn btn-sm btn-outline @(Model.HayPaginaAnterior ? "" : "disabled-link")">«</a><a asp-action="Index" asp-route-pagina="@(Model.PaginaActual - 1)" asp-route-filtro="@filtro" class="btn btn-sm btn-outline @(Model.HayPaginaAnterior ? "" : "disabled-link")">‹</a><span>Página @Model.PaginaActual de @Model.TotalPaginas</span><a asp-action="Index" asp-route-pagina="@(Model.PaginaActual + 1)" asp-route-filtro="@filtro" class="btn btn-sm btn-outline @(Model.HayPaginaSiguiente ? "" : "disabled-link")">›</a><a asp-action="Index" asp-route-pagina="@Model.TotalPaginas" asp-route-filtro="@filtro" class="btn btn-sm btn-outline @(Model.HayPaginaSiguiente ? "" : "disabled-link")">»</a></div></div>
+}
+else
+{
+<div class="card"><div class="card-body"><p>No tienes permiso de consulta para visualizar el listado, pero el módulo sí aparece porque tu perfil tiene alguna otra acción asignada.</p></div></div>
+}

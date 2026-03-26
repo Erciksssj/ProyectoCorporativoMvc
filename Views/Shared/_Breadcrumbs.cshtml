@@ -1,0 +1,22 @@
+@model List<MigaPanItem>
+@if (Model.Any())
+{
+    <nav aria-label="breadcrumb" class="breadcrumbs">
+        @for (var i = 0; i < Model.Count; i++)
+        {
+            var item = Model[i];
+            if (item.Activo || string.IsNullOrWhiteSpace(item.Controlador))
+            {
+                <span class="breadcrumb-current">@item.Texto</span>
+            }
+            else
+            {
+                <a href="@Url.Action(item.Accion, item.Controlador, item.RutaValores)">@item.Texto</a>
+            }
+            if (i < Model.Count - 1)
+            {
+                <span class="breadcrumb-separator">/</span>
+            }
+        }
+    </nav>
+}

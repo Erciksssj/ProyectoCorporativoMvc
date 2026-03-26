@@ -1,0 +1,2 @@
+@model PermisoPerfil
+<div class="card card-narrow"><div class="card-header"><h1>Eliminar permiso</h1></div><div class="card-body"><p>¿Seguro que deseas eliminar este permiso del perfil <strong>@Model.Perfil?.StrNombrePerfil</strong> sobre el módulo <strong>@Model.Modulo?.StrNombreModulo</strong>?</p><form asp-action="Delete" method="post"><input asp-for="Id" type="hidden" /><div class="page-actions"><button type="submit" class="btn btn-danger">Eliminar</button><a asp-action="Index" class="btn btn-outline">Cancelar</a></div></form></div></div>

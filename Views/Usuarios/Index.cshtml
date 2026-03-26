@@ -1,0 +1,24 @@
+@model ResultadoPaginado<Usuario>
+@{ var filtro = ViewBag.Filtro as string ?? string.Empty; var puedeAgregar = (bool)(ViewBag.PuedeAgregar ?? false); var puedeConsultar = (bool)(ViewBag.PuedeConsultar ?? false); var puedeEditar = (bool)(ViewBag.PuedeEditar ?? false); var puedeEliminar = (bool)(ViewBag.PuedeEliminar ?? false); var puedeDetalle = (bool)(ViewBag.PuedeDetalle ?? false); }
+<div class="page-header"><div><h1>Módulo Usuario</h1><p>CRUD completo con imagen, validaciones server-side y paginado de 5 registros.</p></div>@if (puedeAgregar){<a asp-action="Create" class="btn">Nuevo usuario</a>}</div>
+@if (puedeConsultar)
+{
+<div class="card"><div class="card-body"><form method="get" class="filters-inline"><input type="text" name="filtro" value="@filtro" class="form-control" placeholder="Buscar por usuario, correo o celular..." /><button type="submit" class="btn btn-outline">Filtrar</button><a asp-action="Index" class="btn btn-outline">Limpiar</a></form></div></div>
+<div class="card"><div class="table-wrapper"><table class="table"><thead><tr><th>ID</th><th>Imagen</th><th>Usuario</th><th>Perfil</th><th>Correo</th><th>Celular</th><th>Estado</th><th class="actions-column">Acciones</th></tr></thead><tbody>
+@if (Model.Items.Any())
+{
+@foreach (var item in Model.Items)
+{
+<tr><td>@item.Id</td><td>@if (!string.IsNullOrWhiteSpace(item.StrRutaImagen)){<img src="@item.StrRutaImagen" alt="Imagen usuario" class="avatar-list" />}else{<span class="badge badge-secondary">Sin imagen</span>}</td><td>@item.StrNombreUsuario</td><td>@item.Perfil?.StrNombrePerfil</td><td>@item.StrCorreo</td><td>@item.StrNumeroCelular</td><td><span class="badge @(item.IdEstadoUsuario == 1 ? "badge-success" : "badge-danger")">@item.EstadoTexto</span></td><td class="actions-cell">@if (puedeDetalle){<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline">Detalle</a>} @if (puedeEditar){<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline">Editar</a>} @if (puedeEliminar){<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>}</td></tr>
+}
+}
+else
+{
+<tr><td colspan="8" class="empty-state">No hay registros para mostrar.</td></tr>
+}
+</tbody></table></div><div class="pagination"><a asp-action="Index" asp-route-pagina="1" asp-route-filtro="@filtro" class="btn btn-sm btn-outline @(Model.HayPaginaAnterior ? "" : "disabled-link")">«</a><a asp-action="Index" asp-route-pagina="@(Model.PaginaActual - 1)" asp-route-filtro="@filtro" class="btn btn-sm btn-outline @(Model.HayPaginaAnterior ? "" : "disabled-link")">‹</a><span>Página @Model.PaginaActual de @Model.TotalPaginas</span><a asp-action="Index" asp-route-pagina="@(Model.PaginaActual + 1)" asp-route-filtro="@filtro" class="btn btn-sm btn-outline @(Model.HayPaginaSiguiente ? "" : "disabled-link")">›</a><a asp-action="Index" asp-route-pagina="@Model.TotalPaginas" asp-route-filtro="@filtro" class="btn btn-sm btn-outline @(Model.HayPaginaSiguiente ? "" : "disabled-link")">»</a></div></div>
+}
+else
+{
+<div class="card"><div class="card-body"><p>No tienes permiso de consulta para visualizar los usuarios.</p></div></div>
+}

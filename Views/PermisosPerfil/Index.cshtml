@@ -1,0 +1,83 @@
+@model ResultadoPaginado<PerfilPermisosResumenViewModel>
+@{
+    var puedeConsultar = (bool)(ViewBag.PuedeConsultar ?? false);
+    var puedeGestionar = (bool)(ViewBag.PuedeGestionar ?? false);
+}
+
+<div class="page-header">
+    <div>
+        <h1>Módulo Permisos-Perfil</h1>
+        <p>Ahora los permisos se administran por perfil en una matriz de checkboxes, sin editar registro por registro.</p>
+    </div>
+</div>
+
+@if (puedeConsultar || puedeGestionar)
+{
+    <div class="card">
+        <div class="card-body card-body-compact">
+            <p class="lead">Selecciona un perfil para abrir su matriz de permisos.</p>
+        </div>
+        <div class="table-wrapper">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Perfil</th>
+                        <th>Tipo</th>
+                        <th>Módulos con permisos</th>
+                        <th class="actions-column">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Items.Any())
+                    {
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>@item.IdPerfil</td>
+                                <td>@item.NombrePerfil</td>
+                                <td>
+                                    @if (item.EsAdministrador)
+                                    {
+                                        <span class="badge badge-success">Administrador</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-secondary">Estándar</span>
+                                    }
+                                </td>
+                                <td>@item.TotalModulosConPermisos</td>
+                                <td class="actions-cell">
+                                    <a asp-action="Gestionar" asp-route-idPerfil="@item.IdPerfil" class="btn btn-sm btn-outline">
+                                        @(puedeGestionar ? "Gestionar permisos" : "Ver permisos")
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="empty-state">No hay perfiles para mostrar.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination">
+            <a asp-action="Index" asp-route-pagina="1" class="btn btn-sm btn-outline @(Model.HayPaginaAnterior ? "" : "disabled-link")">«</a>
+            <a asp-action="Index" asp-route-pagina="@(Model.PaginaActual - 1)" class="btn btn-sm btn-outline @(Model.HayPaginaAnterior ? "" : "disabled-link")">‹</a>
+            <span>Página @Model.PaginaActual de @Model.TotalPaginas</span>
+            <a asp-action="Index" asp-route-pagina="@(Model.PaginaActual + 1)" class="btn btn-sm btn-outline @(Model.HayPaginaSiguiente ? "" : "disabled-link")">›</a>
+            <a asp-action="Index" asp-route-pagina="@Model.TotalPaginas" class="btn btn-sm btn-outline @(Model.HayPaginaSiguiente ? "" : "disabled-link")">»</a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-body">
+            <p>No tienes permisos para consultar ni administrar este módulo.</p>
+        </div>
+    </div>
+}

@@ -1,0 +1,77 @@
+@model PermisosPerfilMatrizViewModel
+
+<div class="card permissions-card">
+    <div class="card-header">
+        <h1>Permisos — @Model.NombrePerfil</h1>
+        <p>Marca o desmarca los permisos por módulo. Cuando una fila queda completamente vacía, ese permiso se elimina para el perfil.</p>
+    </div>
+    <div class="card-body">
+        @if (Model.EsAdministrador)
+        {
+            <div class="alert alert-success">Este perfil es administrador. Aunque le quites casillas, seguirá teniendo acceso total por su rol de administrador.</div>
+        }
+
+        @if (Model.SoloLectura)
+        {
+            <div class="alert alert-success">Vista en modo consulta.</div>
+        }
+
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+        <form asp-action="Gestionar" method="post" class="form-stack">
+            <input asp-for="IdPerfil" type="hidden" />
+            <input asp-for="NombrePerfil" type="hidden" />
+            <input asp-for="EsAdministrador" type="hidden" />
+            <input asp-for="SoloLectura" type="hidden" />
+
+            <div class="page-actions permissions-toolbar">
+                @if (!Model.SoloLectura)
+                {
+                    <button type="submit" name="operacion" value="marcar-todo" class="btn btn-outline">✓ Marcar todo</button>
+                    <button type="submit" name="operacion" value="limpiar-todo" class="btn btn-outline">✕ Limpiar todo</button>
+                }
+                <a asp-action="Index" class="btn btn-outline">Regresar</a>
+            </div>
+
+            <div class="table-wrapper permissions-matrix-wrapper">
+                <table class="table permissions-matrix-table">
+                    <thead>
+                        <tr>
+                            <th>Módulo</th>
+                            <th class="text-center">Agregar</th>
+                            <th class="text-center">Editar</th>
+                            <th class="text-center">Consultar</th>
+                            <th class="text-center">Eliminar</th>
+                            <th class="text-center">Detalle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.Filas.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <input asp-for="Filas[i].IdModulo" type="hidden" />
+                                    <input asp-for="Filas[i].NombreModulo" type="hidden" />
+                                    <strong>@Model.Filas[i].NombreModulo</strong>
+                                </td>
+                                <td class="text-center"><input asp-for="Filas[i].BitAgregar" disabled="@Model.SoloLectura" /></td>
+                                <td class="text-center"><input asp-for="Filas[i].BitEditar" disabled="@Model.SoloLectura" /></td>
+                                <td class="text-center"><input asp-for="Filas[i].BitConsulta" disabled="@Model.SoloLectura" /></td>
+                                <td class="text-center"><input asp-for="Filas[i].BitEliminar" disabled="@Model.SoloLectura" /></td>
+                                <td class="text-center"><input asp-for="Filas[i].BitDetalle" disabled="@Model.SoloLectura" /></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (!Model.SoloLectura)
+            {
+                <div class="page-actions">
+                    <button type="submit" name="operacion" value="guardar" class="btn">✓ Guardar permisos</button>
+                    <a asp-action="Index" class="btn btn-outline">Cancelar</a>
+                </div>
+            }
+        </form>
+    </div>
+</div>

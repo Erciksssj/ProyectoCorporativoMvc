@@ -1,0 +1,111 @@
+@model InicioSesionViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+<div class="login-wrapper">
+    <div class="card login-card">
+        <div class="card-header">
+            <h1>Iniciar sesión</h1>
+            <p>Ingresa con un usuario activo, contraseña correcta y un mecanismo de verificación válido.</p>
+        </div>
+        <div class="card-body">
+            @if (ViewBag.Error is string error && !string.IsNullOrWhiteSpace(error))
+            {
+                <div class="alert alert-danger">@error</div>
+            }
+
+            @if (Model.GoogleRecaptchaHabilitado)
+            {
+                <div class="alert alert-info">
+                    Google reCAPTCHA está habilitado. Si el navegador tiene JavaScript activo verás el checkbox de <strong>No soy un robot</strong>.
+                    Si JavaScript está desactivado, el formulario seguirá funcionando con el captcha local de respaldo.
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    Google reCAPTCHA todavía no está configurado. El acceso se valida con captcha local de respaldo.
+                </div>
+            }
+
+            <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+            <form asp-action="Login" method="post" class="form-stack" novalidate>
+                <input asp-for="ReturnUrl" type="hidden" />
+                <input asp-for="JsEnabled" type="hidden" id="js-enabled-input" value="false" />
+
+                <div class="form-group">
+                    <label asp-for="StrNombreUsuario"></label>
+                    <input asp-for="StrNombreUsuario" class="form-control" autocomplete="username" />
+                    <span asp-validation-for="StrNombreUsuario" class="field-validation"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="StrPwd"></label>
+                    <input asp-for="StrPwd" class="form-control" autocomplete="current-password" />
+                    <span asp-validation-for="StrPwd" class="field-validation"></span>
+                </div>
+
+                @if (Model.GoogleRecaptchaHabilitado)
+                {
+                    <div class="recaptcha-section js-only-block">
+                        <label class="recaptcha-title">Google reCAPTCHA</label>
+                        <div class="recaptcha-box">
+                            <div class="g-recaptcha" data-sitekey="@Model.GoogleRecaptchaSiteKey"></div>
+                        </div>
+                    </div>
+                }
+
+                @if (!Model.GoogleRecaptchaHabilitado)
+                {
+                    <div class="captcha-box">
+                        <div>
+                            <label>Captcha local</label>
+                            <div class="captcha-question" id="captcha-question">@Model.CaptchaPregunta</div>
+                        </div>
+                        <a class="btn btn-outline btn-sm" id="refresh-captcha" href="@Url.Action("Login", "Cuenta", new { returnUrl = Model.ReturnUrl })" data-captcha-url="@Url.Action("RefrescarCaptcha", "Cuenta")">Cambiar captcha</a>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="CaptchaRespuesta"></label>
+                        <input asp-for="CaptchaRespuesta" class="form-control" />
+                        <span asp-validation-for="CaptchaRespuesta" class="field-validation"></span>
+                    </div>
+                }
+
+                @if (Model.GoogleRecaptchaHabilitado)
+                {
+                    <noscript>
+                        <div class="alert alert-info">JavaScript está desactivado. Usa el captcha local de respaldo para poder iniciar sesión sin que el sistema falle.</div>
+                        <div class="captcha-box noscript-captcha-box">
+                            <div>
+                                <label>Captcha local de respaldo</label>
+                                <div class="captcha-question">@Model.CaptchaPregunta</div>
+                            </div>
+                            <a class="btn btn-outline btn-sm" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">Cambiar captcha</a>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CaptchaRespuesta"></label>
+                            <input asp-for="CaptchaRespuesta" class="form-control" />
+                            <span asp-validation-for="CaptchaRespuesta" class="field-validation"></span>
+                        </div>
+                    </noscript>
+                }
+
+                <button type="submit" class="btn btn-block">Entrar</button>
+            </form>
+
+            <div class="login-help">
+                <p><strong>Usuario inicial:</strong> admin</p>
+                <p><strong>Contraseña inicial:</strong> Admin123*</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @if (Model.GoogleRecaptchaHabilitado)
+    {
+        <script src="@Model.GoogleRecaptchaScriptUrl" async defer></script>
+    }
+}

@@ -1,0 +1,11 @@
+@model Perfil
+<div class="form-grid">
+    <div class="form-group">
+        <label asp-for="StrNombrePerfil"></label>
+        <input asp-for="StrNombrePerfil" class="form-control" />
+        <span asp-validation-for="StrNombrePerfil" class="field-validation"></span>
+    </div>
+    <div class="form-group checkbox-group">
+        <label class="checkbox-label"><input asp-for="BitAdministrador" /> @Html.DisplayNameFor(m => m.BitAdministrador)</label>
+    </div>
+</div>

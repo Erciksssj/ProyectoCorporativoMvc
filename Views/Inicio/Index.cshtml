@@ -1,0 +1,30 @@
+@model List<GrupoMenuViewModel>
+<div class="page-header">
+    <div>
+        <h1>Panel principal</h1>
+        <p>Desde aquí puedes acceder a los módulos visibles según los permisos asignados al perfil del usuario.</p>
+    </div>
+</div>
+@if (!Model.Any())
+{
+    <div class="card"><div class="card-body"><p>Tu usuario no tiene permisos asignados en ningún módulo del menú.</p></div></div>
+}
+else
+{
+    <div class="dashboard-grid">
+        @foreach (var grupo in Model)
+        {
+            <section class="card">
+                <div class="card-header"><h2>@grupo.Titulo</h2></div>
+                <div class="card-body">
+                    <ul class="module-list">
+                        @foreach (var modulo in grupo.Modulos)
+                        {
+                            <li><a asp-controller="@modulo.Controlador" asp-action="@modulo.Accion" asp-route-clave="@modulo.Clave">@modulo.Titulo</a></li>
+                        }
+                    </ul>
+                </div>
+            </section>
+        }
+    </div>
+}

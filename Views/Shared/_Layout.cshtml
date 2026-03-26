@@ -1,0 +1,68 @@
+@inject ProyectoCorporativoMvc.Services.IServicioMenu ServicioMenu
+@{
+    var titulo = ViewData["Title"]?.ToString() ?? "Proyecto Corporativo MVC";
+    var autenticado = User.Identity?.IsAuthenticated == true;
+    var menus = autenticado ? await ServicioMenu.ObtenerMenusAsync(User) : new List<GrupoMenuViewModel>();
+}
+<!DOCTYPE html>
+<html lang="es" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@titulo - Proyecto Corporativo MVC</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <a asp-controller="Inicio" asp-action="Index">Proyecto Corporativo MVC</a>
+            <span class="brand-subtitle">ASP.NET Core MVC + JWT + Seguridad</span>
+        </div>
+        @if (autenticado)
+        {
+            <div class="topbar-actions">
+                <span class="user-chip">Usuario: <strong>@User.Identity?.Name</strong></span>
+                <form asp-controller="Cuenta" asp-action="Logout" method="post">
+                    <button type="submit" class="btn btn-outline">Cerrar sesión</button>
+                </form>
+            </div>
+        }
+    </header>
+
+    <div class="app-shell @(autenticado ? string.Empty : "app-shell-public")">
+        @if (autenticado)
+        {
+            <aside class="sidebar">
+                <a class="sidebar-home" asp-controller="Inicio" asp-action="Index">Inicio</a>
+                @foreach (var grupo in menus)
+                {
+                    <section class="menu-group">
+                        <h3>@grupo.Titulo</h3>
+                        <ul>
+                            @foreach (var modulo in grupo.Modulos)
+                            {
+                                <li>
+                                    <a asp-controller="@modulo.Controlador" asp-action="@modulo.Accion" asp-route-clave="@modulo.Clave">@modulo.Titulo</a>
+                                </li>
+                            }
+                        </ul>
+                    </section>
+                }
+            </aside>
+        }
+
+        <main class="content @(autenticado ? string.Empty : "content-public")">
+            @await Html.PartialAsync("_Alerts")
+            @if (autenticado)
+            {
+                var migas = ViewData["Breadcrumbs"] as List<MigaPanItem> ?? new List<MigaPanItem>();
+                @await Html.PartialAsync("_Breadcrumbs", migas)
+            }
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

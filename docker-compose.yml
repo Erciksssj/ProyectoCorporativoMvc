@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  proyecto-corporativo-mvc:
+    build: .
+    container_name: proyecto-corporativo-mvc
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./.data:/app/App_Data
+      - ./.uploads:/app/wwwroot/uploads/users
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080

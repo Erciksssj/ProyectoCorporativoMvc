@@ -1,0 +1,2 @@
+@model UsuarioFormViewModel
+<div class="card"><div class="card-header"><h1>Crear usuario</h1></div><div class="card-body"><div asp-validation-summary="ModelOnly" class="validation-summary"></div><form asp-action="Create" method="post" enctype="multipart/form-data" class="form-stack">@await Html.PartialAsync("_Form", Model)<div class="page-actions"><button type="submit" class="btn">Guardar</button><a asp-action="Index" class="btn btn-outline">Cancelar</a></div></form></div></div>

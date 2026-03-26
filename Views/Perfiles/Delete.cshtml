@@ -1,0 +1,2 @@
+@model Perfil
+<div class="card card-narrow"><div class="card-header"><h1>Eliminar perfil</h1></div><div class="card-body"><p>¿Seguro que deseas eliminar el perfil <strong>@Model.StrNombrePerfil</strong>?</p><form asp-action="Delete" method="post"><input asp-for="Id" type="hidden" /><div class="page-actions"><button type="submit" class="btn btn-danger">Eliminar</button><a asp-action="Index" class="btn btn-outline">Cancelar</a></div></form></div></div>

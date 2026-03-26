@@ -1,0 +1,2 @@
+@model Perfil
+<div class="card card-narrow"><div class="card-header"><h1>Editar perfil</h1></div><div class="card-body"><div asp-validation-summary="ModelOnly" class="validation-summary"></div><form asp-action="Edit" method="post" class="form-stack"><input asp-for="Id" type="hidden" />@await Html.PartialAsync("_Form", Model)<div class="page-actions"><button type="submit" class="btn">Actualizar</button><a asp-action="Index" class="btn btn-outline">Cancelar</a></div></form></div></div>

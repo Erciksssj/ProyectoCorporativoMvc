@@ -1,0 +1,13 @@
+@if (TempData["Exito"] is string exito && !string.IsNullOrWhiteSpace(exito))
+{
+    <div class="alert alert-success">@exito</div>
+}
+@if (TempData["Error"] is string error && !string.IsNullOrWhiteSpace(error))
+{
+    <div class="alert alert-danger">@error</div>
+}
+
+@if (TempData["Info"] is string info && !string.IsNullOrWhiteSpace(info))
+{
+    <div class="alert alert-info">@info</div>
+}

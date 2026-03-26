@@ -1,0 +1,17 @@
+@model ErrorViewModel
+<div class="card card-narrow">
+    <div class="card-header">
+        <h1>@Model.Titulo</h1>
+    </div>
+    <div class="card-body">
+        <p class="lead">@Model.Mensaje</p>
+        <div class="definition-list">
+            <div><strong>Código:</strong> @Model.StatusCode</div>
+            <div><strong>Request ID:</strong> @Model.RequestId</div>
+        </div>
+        <div class="page-actions">
+            <a asp-controller="Inicio" asp-action="Index" class="btn">Volver al inicio</a>
+            <a asp-controller="Cuenta" asp-action="Login" class="btn btn-outline">Ir al login</a>
+        </div>
+    </div>
+</div>
