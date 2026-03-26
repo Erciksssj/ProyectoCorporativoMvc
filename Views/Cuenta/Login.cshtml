@@ -2,14 +2,15 @@
 @{
     ViewData["Title"] = "Login";
 }
+
 <div class="login-wrapper">
     <div class="card login-card">
         <div class="card-header">
             <h1>Iniciar sesión</h1>
             <p>Ingresa con un usuario activo, contraseña correcta y un mecanismo de verificación válido.</p>
         </div>
-       
 
+        <div class="card-body">
             <form asp-action="Login" method="post" class="form-stack" novalidate>
                 <input asp-for="ReturnUrl" type="hidden" />
                 <input asp-for="JsEnabled" type="hidden" id="js-enabled-input" value="false" />
@@ -43,7 +44,12 @@
                             <label>Captcha local</label>
                             <div class="captcha-question" id="captcha-question">@Model.CaptchaPregunta</div>
                         </div>
-                        <a class="btn btn-outline btn-sm" id="refresh-captcha" href="@Url.Action("Login", "Cuenta", new { returnUrl = Model.ReturnUrl })" data-captcha-url="@Url.Action("RefrescarCaptcha", "Cuenta")">Cambiar captcha</a>
+                        <a class="btn btn-outline btn-sm"
+                           id="refresh-captcha"
+                           href="@Url.Action("Login", "Cuenta", new { returnUrl = Model.ReturnUrl })"
+                           data-captcha-url="@Url.Action("RefrescarCaptcha", "Cuenta")">
+                            Cambiar captcha
+                        </a>
                     </div>
 
                     <div class="form-group">
@@ -56,14 +62,22 @@
                 @if (Model.GoogleRecaptchaHabilitado)
                 {
                     <noscript>
-                        <div class="alert alert-info">JavaScript está desactivado. Usa el captcha local de respaldo para poder iniciar sesión sin que el sistema falle.</div>
+                        <div class="alert alert-info">
+                            JavaScript está desactivado. Usa el captcha local de respaldo para poder iniciar sesión sin que el sistema falle.
+                        </div>
+
                         <div class="captcha-box noscript-captcha-box">
                             <div>
                                 <label>Captcha local de respaldo</label>
                                 <div class="captcha-question">@Model.CaptchaPregunta</div>
                             </div>
-                            <a class="btn btn-outline btn-sm" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">Cambiar captcha</a>
+                            <a class="btn btn-outline btn-sm"
+                               asp-action="Login"
+                               asp-route-returnUrl="@Model.ReturnUrl">
+                                Cambiar captcha
+                            </a>
                         </div>
+
                         <div class="form-group">
                             <label asp-for="CaptchaRespuesta"></label>
                             <input asp-for="CaptchaRespuesta" class="form-control" />
